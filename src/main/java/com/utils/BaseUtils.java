@@ -3,6 +3,9 @@ package com.utils;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
+/**
+ * 进制转换工具类
+ * */
 public class BaseUtils {
 
     /**
