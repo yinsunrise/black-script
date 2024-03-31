@@ -2,6 +2,9 @@ package com.simulate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import static com.utils.BaseUtils.*;
 
 public class SimulateMain {
 
@@ -9,27 +12,20 @@ public class SimulateMain {
         //登录封包
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-        dataOutputStream.writeShort(0);
+        dataOutputStream.writeShort(1);// 固定为0或其他，因为加入整体长度计算后会被覆盖,第一号位为临时占位
         dataOutputStream.writeShort(0);
         dataOutputStream.writeUTF("aa1151640928");
         dataOutputStream.writeUTF("lc412309");
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        System.out.println("原生未计算：" + Arrays.toString(byteArray));
+        System.out.println("未计算转16："+byteArrayToHexString(byteArray));
         byte[] a = a(byteArrayOutputStream);
-        String j = j(a);
-        System.out.println(j);
+        System.out.println("长度计算后：" + Arrays.toString(a));
+        String j = byteArrayToHexString(a);
+        System.out.println("计算后转16："+j);
     }
 
 
-    /**
-     * 二进制转十六进制
-     * */
-    public static String j(byte[] bArr) {
-        StringBuilder sb = new StringBuilder(bArr.length * 2);
-        for (byte b : bArr) {
-            sb.append("0123456789ABCDEF".charAt((b >> 4) & 15));
-            sb.append("0123456789ABCDEF".charAt(b & ar.m));
-        }
-        return sb.toString();
-    }
 
 
     /**
@@ -44,7 +40,13 @@ public class SimulateMain {
 
 
     /**
-     * 计算前缀长度，如何计算未知
+     * 计算前缀长度，如何计算未知  十进制转字节流
+     *
+     * length : 128
+     * 128的计算机存储形式是补码，需要将128的原码转换为补码(正数原码及为补码)
+     * 128 -> 00000000 10000000 -> 00000000 10000000
+     * 补码
+     *
      * */
     public static byte[] b(short s) {
         byte[] bArr = new byte[2];
